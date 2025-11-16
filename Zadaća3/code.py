@@ -23,9 +23,9 @@ import asyncio
 async def dohvati_pacijente():
     await asyncio.sleep(3) 
     pacijenti = [
-        {"ime": "Ivan", "dob": 34, "dijagnoza": "Lud"},
-        {"ime": "Ana", "dob": 29, "dijagnoza": "Munjena"},
-        {"ime": "Marko", "dob": 42, "dijagnoza": "Zgoren"},
+        {"ime": "Bepo", "dob": 34, "dijagnoza": "Lud"},
+        {"ime": "Marija", "dob": 29, "dijagnoza": "Munjena"},
+        {"ime": "Pino", "dob": 42, "dijagnoza": "Zgoren"},
     ]
     print("Pacijenti dohvaceni.")
     return pacijenti
@@ -57,16 +57,16 @@ import asyncio
 
 baza_korisnika = [
     {'korisnicko_ime': 'mirko123', 'email': 'mirko123@gmail.com'},
-    {'korisnicko_ime': 'ana_anic', 'email': 'aanic@gmail.com'},
-    {'korisnicko_ime': 'maja_0x', 'email': 'majaaaaa@gmail.com'},
-    {'korisnicko_ime': 'zdeslav032', 'email': 'deso032@gmail.com'}
+    {'korisnicko_ime': 'marija123', 'email': 'marija123@gmail.com'},
+    {'korisnicko_ime': 'pina123', 'email': 'pina123@gmail.com'},
+    {'korisnicko_ime': 'giovanni123', 'email': 'giovanni123@gmail.com'}
 ]
 
 baza_lozinka = [
     {'korisnicko_ime': 'mirko123', 'lozinka': 'lozinka123'},
-    {'korisnicko_ime': 'ana_anic', 'lozinka': 'super_teska_lozinka'},
-    {'korisnicko_ime': 'maja_0x', 'lozinka': 's324SDFfdsj234'},
-    {'korisnicko_ime': 'zdeslav032', 'lozinka': 'deso123'}
+    {'korisnicko_ime': 'marija123', 'lozinka': 'super_teska_lozinka'},
+    {'korisnicko_ime': 'pina123', 'lozinka': 's324SDFfdsj234'},
+    {'korisnicko_ime': 'giovanni123', 'lozinka': 'đovani222'}
 ]
 
 async def autorizacija(korisnik_iz_baze, lozinka_unesena):
@@ -121,7 +121,7 @@ async def main():
 
 asyncio.run(main())
 '''
-
+'''
 import asyncio
 
 async def secure_data(podaci):
@@ -148,3 +148,29 @@ async def main():
         print(rezultat)
 
 asyncio.run(main())
+'''
+
+'''
+Skripta kaže ovako:
+
+event loop će pokrenuti obje korutine ( task1 i task2 ) jer su obje raspoređene, pokrenut će ih onim
+redoslijedom kojim su raspoređene
+obje korutine će se izvršiti bez obzira što nismo awaitali task1
+trajanje korutine fetch_data(2) dulje je za sekundu od fetch_data(1) - obje će se izvršiti do kraja,
+a nakon toga će se zatvoriti event loop
+
+'''
+
+'''
+
+- pokreće se event loop
+- stvaraju se 3 taska i schedulaju se u loop
+- gather pauzira main 
+- loop pokreće sve timere naizmjenično
+- ispiše se prvi red i onda čeka sekundu
+- nakon sekunde, opet se ispisuje
+- to se ponavlja sve dok svaki timer ne odbroji svoje
+- kad svi timeri završe, gather operacija je gotova
+- loop je završen
+
+'''
