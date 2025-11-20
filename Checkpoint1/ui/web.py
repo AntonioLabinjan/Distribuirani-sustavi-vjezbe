@@ -5,7 +5,8 @@ from data.storage import (
     add_project,
     delete_project,
     get_project_by_id,
-    edit_project
+    edit_project,
+    count_projects
 )
 
 #html string jer mi se ni dalo delat templates folder :D
@@ -21,7 +22,7 @@ HTML_INDEX = """
 
 <hr>
 
-<h2>Popis projekata</h2>
+<h2>Popis projekata (ukupno: {{total}})</h2>
 <ul>
 {% for p in projects %}
     <li>
@@ -43,6 +44,7 @@ HTML_INDEX = """
 """
 
 
+
 HTML_EDIT = """
 <h1>Uredi projekt</h1>
 
@@ -61,12 +63,14 @@ HTML_EDIT = """
 def create_app():
     app = Flask(__name__)
     init_db()
-    # ruta za dohvat svih podataka + dinamički rendering HTML-a i podataka
+
     @app.route("/")
     def index():
         projects = get_all_projects()
-        return render_template_string(HTML_INDEX, projects=projects)
-    # poziv funkcije add project pri svakom postu; podaci se dohvaćaju iz requesta (upisani u form)
+        total = count_projects()
+        return render_template_string(HTML_INDEX, projects=projects, total=total)
+
+
     @app.route("/add", methods=["POST"])
     def add():
         add_project(
@@ -75,21 +79,18 @@ def create_app():
             description=request.form["description"],
         )
         return redirect("/")
-        
-    # birsanje po id-ju
+
     @app.route("/delete/<int:pid>", methods=["POST"])
     def delete(pid):
         delete_project(pid)
         return redirect("/")
 
-    # eddit po id-ju; dinamički rendering edit forme
     @app.route("/edit/<int:pid>", methods=["GET", "POST"])
     def edit(pid):
         if request.method == "GET":
             p = get_project_by_id(pid)
             return render_template_string(HTML_EDIT, p=p)
 
-        # POST za promjene
         edit_project(
             pid=pid,
             new_student_name=request.form["student_name"],
