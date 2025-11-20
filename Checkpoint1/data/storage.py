@@ -24,9 +24,6 @@ def init_db():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         student_name TEXT NOT NULL,
         project_title TEXT NOT NULL,
-        description TEXT NOT NULL,
-        status TEXT DEFAULT 'u izradi',
-        grade INTEGER
     )
     """)
     conn.commit()
@@ -62,9 +59,7 @@ def get_all_projects():
             "id": r[0],
             "student_name": r[1],
             "project_title": r[2],
-            "description": r[3],
-            "status": r[4],
-            "grade": r[5],
+            "description": r[3]
         }
         for r in rows
     ]
@@ -78,5 +73,27 @@ def delete_project(pid):
     conn = get_conn()
     c = conn.cursor()
     c.execute("DELETE FROM projects WHERE id = ?", (pid,))
+    conn.commit()
+    conn.close()
+
+def get_project_by_id(pid):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT * FROM projects WHERE id = ?", (pid,))
+    row = c.fetchone()
+    conn.close()
+    return row
+
+def edit_project(pid, new_student_name, new_name, new_description):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        """
+        UPDATE projects
+        SET student_name = ?, project_title = ?, description = ?
+        WHERE id = ?
+        """,
+        (new_student_name, new_name, new_description, pid)
+    )
     conn.commit()
     conn.close()
