@@ -23,7 +23,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS projects (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         student_name TEXT NOT NULL,
-        project_title TEXT NOT NULL,
+        project_title TEXT NOT NULL
     )
     """)
     conn.commit()
@@ -97,3 +97,11 @@ def edit_project(pid, new_student_name, new_name, new_description):
     )
     conn.commit()
     conn.close()
+
+def count_projects():
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM projects")
+    count = c.fetchone()[0]
+    conn.close()
+    return count
