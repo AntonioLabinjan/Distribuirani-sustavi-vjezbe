@@ -80,9 +80,7 @@ distsys_checkpoint/
 
 ---
 
-## 🛠️ 3. Instalacija i pokretanje
-
-Upute moraju biti 100% reproducibilne.
+## 3. Instalacija i pokretanje
 
 ### 3.1. Kloniranje repozitorija
 
