@@ -165,9 +165,9 @@ Otvara se terminal u kojem se nakon par sekundi pokreće aplikacija na identiča
 
 ## Autor
 
-Antonio Labinjan
-Kolegij: Distribuirani sustavi
-Ak. godina: 2025/26
+- Antonio Labinjan
+- Kolegij: Distribuirani sustavi
+- Ak. godina: 2025/26
 
 ---
 
