@@ -85,7 +85,6 @@ distsys_checkpoint/
 ### 3.1. Kloniranje repozitorija
 
 ```bash
-git clone https://github.com/AntonioLabinjan/Distribuirani-sustavi-vjezbe/tree/master/Checkpoint1
 
 
 C:\Users\Korisnik\Desktop>git clone https://github.com/AntonioLabinjan/Distribuirani-sustavi-vjezbe
