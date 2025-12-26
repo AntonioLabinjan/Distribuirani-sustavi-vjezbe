@@ -1,0 +1,19 @@
+<h1>Projekti ({{ count }})</h1>
+
+<form method="POST">
+    <input name="student_name" placeholder="Student">
+    <input name="project_title" placeholder="Projekt">
+    <input name="description" placeholder="Opis">
+    <button>Dodaj</button>
+</form>
+
+<ul>
+{% for p in projects %}
+<li>
+{{p.project_title}} – {{p.student_name}}
+<form method="POST" action="/delete/{{p.id}}">
+<button>Obriši</button>
+</form>
+</li>
+{% endfor %}
+</ul>
