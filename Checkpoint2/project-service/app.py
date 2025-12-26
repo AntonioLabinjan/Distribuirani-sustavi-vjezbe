@@ -1,37 +1,32 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Form
 from pydantic import BaseModel
 import sqlite3
 
 DB = "projects.db"
-
 app = FastAPI()
-
 
 def get_conn():
     return sqlite3.connect(DB, check_same_thread=False)
-
 
 @app.on_event("startup")
 def init_db():
     conn = get_conn()
     c = conn.cursor()
     c.execute("""
-    CREATE TABLE IF NOT EXISTS projects (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_name TEXT,
-        project_title TEXT,
-        description TEXT
-    )
+        CREATE TABLE IF NOT EXISTS projects (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_name TEXT,
+            project_title TEXT,
+            description TEXT
+        )
     """)
     conn.commit()
     conn.close()
-
 
 class ProjectIn(BaseModel):
     student_name: str
     project_title: str
     description: str
-
 
 @app.get("/projects")
 def get_projects():
@@ -40,16 +35,7 @@ def get_projects():
     c.execute("SELECT * FROM projects")
     rows = c.fetchall()
     conn.close()
-    return [
-        {
-            "id": r[0],
-            "student_name": r[1],
-            "project_title": r[2],
-            "description": r[3],
-        }
-        for r in rows
-    ]
-
+    return [{"id": r[0], "student_name": r[1], "project_title": r[2], "description": r[3]} for r in rows]
 
 @app.post("/projects")
 def add_project(p: ProjectIn):
@@ -57,12 +43,26 @@ def add_project(p: ProjectIn):
     c = conn.cursor()
     c.execute(
         "INSERT INTO projects (student_name, project_title, description) VALUES (?, ?, ?)",
-        (p.student_name, p.project_title, p.description),
+        (p.student_name, p.project_title, p.description)
     )
     conn.commit()
     conn.close()
     return {"status": "ok"}
 
+@app.post("/edit/{pid}")
+def edit_project_form(pid: int,
+                      student_name: str = Form(...),
+                      project_title: str = Form(...),
+                      description: str = Form(...)):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        "UPDATE projects SET student_name = ?, project_title = ?, description = ? WHERE id = ?",
+        (student_name, project_title, description, pid)
+    )
+    conn.commit()
+    conn.close()
+    return {"status": "ok"}
 
 @app.delete("/projects/{pid}")
 def delete_project(pid: int):
