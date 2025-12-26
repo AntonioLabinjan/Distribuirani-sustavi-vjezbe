@@ -1,23 +1,33 @@
+version: "3.9"
+
 services:
-  frontend:
-    build: ./frontend-service
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
     ports:
-      - "5000:5000"
-    depends_on:
-      - project-service
-      - stats-service
+      - "8002:8002"
 
   project-service:
     build: ./project-service
+    container_name: project-service
     ports:
       - "8000:8000"
 
   stats-service:
     build: ./stats-service
+    container_name: stats-service
     ports:
       - "8001:8001"
+    depends_on:
+      - auth-service
+      - project-service
 
-  auth-service:
-    build: ./auth-service
+  frontend:
+    build: ./frontend-service
+    container_name: frontend
     ports:
-      - "8002:8002"
+      - "5000:5000"
+    depends_on:
+      - auth-service
+      - project-service
+      - stats-service
